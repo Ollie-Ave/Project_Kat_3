@@ -2,10 +2,16 @@ package levels
 
 import "github.com/Ollie-Ave/Project_Kat_3/internal/shared"
 
-func InitLevelManager() LevelManager {
-	return &LevelManagerImpl{
-		currentLevel: initLevelOne(),
+func InitLevelManager() (LevelManager, error) {
+	levelOne, err := initLevelOne()
+
+	if err != nil {
+		return nil, err
 	}
+
+	return &LevelManagerImpl{
+		currentLevel: levelOne,
+	}, nil
 }
 
 type LevelManager interface {

@@ -11,7 +11,11 @@ import (
 func main() {
 	setupWindow()
 
-	levelManager := levels.InitLevelManager()
+	levelManager, err := levels.InitLevelManager()
+
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println("Starting Game")
 
