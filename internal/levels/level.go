@@ -10,8 +10,13 @@ type levelData struct {
 type layer struct {
 	Id int
 
-	Data  []int
-	Image string
+	Data []int
+
+	ImagePath    string `json:"image"`
+	ImageTexture rl.Texture2D
+
+	Offsetx float32
+	Offsety float32
 
 	Height int
 	Width  int

@@ -25,17 +25,17 @@ func TestGetTileSetByIdWith20(t *testing.T) {
 }
 
 func testGetTileSetById(tileSetId, expectedFirstGid int, t *testing.T) {
-	level := &levelOne{
-		levelData: &levelData{
-			Layers: []*layer{},
-			TileSets: []*tileSet{
-				{FirstGid: 1},
-				{FirstGid: 10},
-				{FirstGid: 15}},
-		},
+	levelData := &levelData{
+		Layers: []*layer{},
+		TileSets: []*tileSet{
+			{FirstGid: 1},
+			{FirstGid: 10},
+			{FirstGid: 15}},
 	}
 
-	tileSet := level.getTileSetById(tileSetId)
+	levelRenderer := &levelRendererImpl{}
+
+	tileSet := levelRenderer.getTileSetById(tileSetId, levelData)
 
 	if tileSet == nil || tileSet.FirstGid != expectedFirstGid {
 		t.Fatalf("Expected tileSet.FirstGid to be %v, got %v", expectedFirstGid, tileSet.FirstGid)
