@@ -2,7 +2,7 @@ package levels
 
 import "github.com/Ollie-Ave/Project_Kat_3/internal/shared"
 
-func InitLevelManager() (LevelManager, error) {
+func NewLevelManager() (LevelManager, error) {
 	levelOne, err := initLevelOne()
 
 	if err != nil {

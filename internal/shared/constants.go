@@ -1,4 +1,4 @@
-package constants
+package shared
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
@@ -9,6 +9,8 @@ const (
 	WindowTitle     = "Project Kat"
 
 	WindowExitKey = rl.KeyCapsLock
+
+	CameraEntityName = "camera"
 )
 
 var (
