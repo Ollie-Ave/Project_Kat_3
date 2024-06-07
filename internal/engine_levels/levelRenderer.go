@@ -1,14 +1,14 @@
-package levels
+package engine_levels
 
 import (
 	"cmp"
 	"slices"
 
-	"github.com/Ollie-Ave/Project_Kat_3/internal/entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func NewLevelRenderer(entityManager entities.EntityManager) LevelRenderer {
+func NewLevelRenderer(entityManager engine_entities.EntityManager) LevelRenderer {
 	return &levelRendererImpl{
 		entityManager: entityManager,
 	}
@@ -26,14 +26,14 @@ func getNewTilePosition(x, y int, maxX int) (int, int) {
 }
 
 type LevelRenderer interface {
-	Render(levelData *levelData)
+	Render(levelData *LevelData)
 }
 
 type levelRendererImpl struct {
-	entityManager entities.EntityManager
+	entityManager engine_entities.EntityManager
 }
 
-func (l *levelRendererImpl) Render(levelData *levelData) {
+func (l *levelRendererImpl) Render(levelData *LevelData) {
 	const tileLayer = "tilelayer"
 	const imageLayer = "imagelayer"
 
@@ -46,7 +46,7 @@ func (l *levelRendererImpl) Render(levelData *levelData) {
 	}
 }
 
-func (l *levelRendererImpl) renderImageLayer(layer *layer) error {
+func (l *levelRendererImpl) renderImageLayer(layer *Layer) error {
 	cameraEntity, err := l.entityManager.GetCamera()
 
 	if err != nil {
@@ -96,7 +96,7 @@ func (l *levelRendererImpl) renderImageLayer(layer *layer) error {
 	return nil
 }
 
-func (l *levelRendererImpl) renderTileLayer(layer *layer, levelData *levelData) {
+func (l *levelRendererImpl) renderTileLayer(layer *Layer, levelData *LevelData) {
 	x := -1
 	y := 0
 
@@ -121,11 +121,11 @@ func (l *levelRendererImpl) renderTileLayer(layer *layer, levelData *levelData) 
 	}
 }
 
-func (l *levelRendererImpl) getTileData(tileId int, levelData *levelData) *tile {
+func (l *levelRendererImpl) getTileData(tileId int, levelData *LevelData) *Tile {
 	tileSet := l.getTileSetById(tileId, levelData)
 	tileX, tileY := l.getTilePositionByTileId(tileId, tileSet)
 
-	return &tile{
+	return &Tile{
 		Texture: tileSet.Texture,
 		Height:  tileSet.TileHeight,
 		Width:   tileSet.TileWidth,
@@ -137,10 +137,10 @@ func (l *levelRendererImpl) getTileData(tileId int, levelData *levelData) *tile 
 	}
 }
 
-func (l *levelRendererImpl) getTileSetById(id int, levelData *levelData) *tileSet {
-	var returnValue *tileSet
+func (l *levelRendererImpl) getTileSetById(id int, levelData *LevelData) *TileSet {
+	var returnValue *TileSet
 
-	slices.SortFunc(levelData.TileSets, func(a, b *tileSet) int {
+	slices.SortFunc(levelData.TileSets, func(a, b *TileSet) int {
 		return cmp.Compare(a.FirstGid, b.FirstGid)
 	})
 
@@ -155,7 +155,7 @@ func (l *levelRendererImpl) getTileSetById(id int, levelData *levelData) *tileSe
 	return returnValue
 }
 
-func (l *levelRendererImpl) getTilePositionByTileId(id int, tileSet *tileSet) (int, int) {
+func (l *levelRendererImpl) getTilePositionByTileId(id int, tileSet *TileSet) (int, int) {
 	x, y := 0, 0
 
 	for i := tileSet.FirstGid; i < id; i++ {

@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Ollie-Ave/Project_Kat_3/internal/entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_levels"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -15,7 +16,7 @@ const (
 	tileSrcPath = "tileSets/src"
 )
 
-func initLevelOne(levelRenderer LevelRenderer, entityManager entities.EntityManager) (*levelOne, error) {
+func NewLevelOne(levelRenderer engine_levels.LevelRenderer, entityManager engine_entities.EntityManager) (*levelOne, error) {
 	levelOneFilePath := fmt.Sprintf("%s/%s/testLevel.json", assetsPath, levelPath)
 
 	levelData, err := loadLevelData(&levelOneFilePath)
@@ -39,8 +40,8 @@ func initLevelOne(levelRenderer LevelRenderer, entityManager entities.EntityMana
 	}, nil
 }
 
-func loadLevelData(filePath *string) (*levelData, error) {
-	var levelData *levelData
+func loadLevelData(filePath *string) (*engine_levels.LevelData, error) {
+	var levelData *engine_levels.LevelData
 
 	levelFile, err := os.ReadFile(*filePath)
 
@@ -82,11 +83,11 @@ func loadLevelData(filePath *string) (*levelData, error) {
 }
 
 type levelOne struct {
-	levelRenderer LevelRenderer
+	levelRenderer engine_levels.LevelRenderer
 
-	entityManager entities.EntityManager
+	entityManager engine_entities.EntityManager
 
-	levelData *levelData
+	levelData *engine_levels.LevelData
 }
 
 func (l *levelOne) Render() {

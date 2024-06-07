@@ -1,16 +1,16 @@
-package levels
+package engine_levels
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
-type levelData struct {
-	Layers   []*layer
-	TileSets []*tileSet
+type LevelData struct {
+	Layers   []*Layer
+	TileSets []*TileSet
 
 	Width     int
 	TileWidth int
 }
 
-type layer struct {
+type Layer struct {
 	Id int
 
 	Data []int
@@ -30,7 +30,7 @@ type layer struct {
 	LayerType string `json:"type"`
 }
 
-type tileSet struct {
+type TileSet struct {
 	FirstGid int
 
 	Image   string
@@ -42,7 +42,7 @@ type tileSet struct {
 	Columns int
 }
 
-type tile struct {
+type Tile struct {
 	Texture    rl.Texture2D
 	Height     int
 	Width      int

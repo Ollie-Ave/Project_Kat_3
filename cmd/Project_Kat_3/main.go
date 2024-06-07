@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_levels"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/entities"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/levels"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/shared"
@@ -15,8 +17,14 @@ func main() {
 	entityManager := entities.NewEntityManager()
 	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera())
 
-	levelRenderer := levels.NewLevelRenderer(entityManager)
-	levelManager, err := levels.NewLevelManager(levelRenderer, entityManager)
+	levelRenderer := engine_levels.NewLevelRenderer(entityManager)
+	levelOne, err := levels.NewLevelOne(levelRenderer, entityManager)
+
+	if err != nil {
+		panic(err)
+	}
+
+	levelManager, err := engine_levels.NewLevelManager(levelOne, levelRenderer, entityManager)
 
 	if err != nil {
 		panic(err)
@@ -38,7 +46,7 @@ func setupWindow() {
 	rl.SetExitKey(shared.WindowExitKey)
 }
 
-func update(levelManager levels.LevelManager, entityManager entities.EntityManager) {
+func update(levelManager engine_levels.LevelManager, entityManager engine_entities.EntityManager) {
 	rl.BeginDrawing()
 
 	err := beginCameraMode2D(entityManager)
@@ -66,7 +74,7 @@ func update(levelManager levels.LevelManager, entityManager entities.EntityManag
 	renderFPS()
 }
 
-func beginCameraMode2D(entityManager entities.EntityManager) error {
+func beginCameraMode2D(entityManager engine_entities.EntityManager) error {
 	camera, err := entityManager.GetCamera()
 
 	if err != nil {

@@ -3,32 +3,24 @@ package entities
 import (
 	"fmt"
 
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/shared"
 )
 
-func NewEntityManager() EntityManager {
+func NewEntityManager() engine_entities.EntityManager {
 	return &EntityManagerImpl{
-		entities:           make(map[string]EntityUpdatable),
+		entities:           make(map[string]engine_entities.EntityUpdatable),
 		duplicateEntityIds: make(map[string]int),
 	}
 }
 
-type EntityManager interface {
-	SpawnEntity(string, EntityUpdatable)
-
-	GetEntities() map[string]EntityUpdatable
-
-	GetEntityById(string) (EntityUpdatable, error)
-
-	GetCamera() (shared.CameraPosessor, error)
-}
-
 type EntityManagerImpl struct {
-	entities           map[string]EntityUpdatable
+	entities           map[string]engine_entities.EntityUpdatable
 	duplicateEntityIds map[string]int
 }
 
-func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdatable) {
+func (e *EntityManagerImpl) SpawnEntity(id string, entity engine_entities.EntityUpdatable) {
 	if e.entities[id] != nil {
 		e.duplicateEntityIds[id]++
 
@@ -38,11 +30,11 @@ func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdatable) {
 	e.entities[id] = entity
 }
 
-func (e *EntityManagerImpl) GetEntities() map[string]EntityUpdatable {
+func (e *EntityManagerImpl) GetEntities() map[string]engine_entities.EntityUpdatable {
 	return e.entities
 }
 
-func (e *EntityManagerImpl) GetEntityById(id string) (EntityUpdatable, error) {
+func (e *EntityManagerImpl) GetEntityById(id string) (engine_entities.EntityUpdatable, error) {
 	entity := e.entities[id]
 
 	if entity == nil {
@@ -52,12 +44,12 @@ func (e *EntityManagerImpl) GetEntityById(id string) (EntityUpdatable, error) {
 	return entity, nil
 }
 
-func (e *EntityManagerImpl) GetCamera() (shared.CameraPosessor, error) {
+func (e *EntityManagerImpl) GetCamera() (engine_shared.CameraPosessor, error) {
 	camera, err := e.GetEntityById(shared.CameraEntityName)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return camera.(shared.CameraPosessor), nil
+	return camera.(engine_shared.CameraPosessor), nil
 }

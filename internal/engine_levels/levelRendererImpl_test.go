@@ -1,4 +1,4 @@
-package levels
+package engine_levels
 
 import (
 	"testing"
@@ -25,9 +25,9 @@ func TestGetTileSetByIdWith20(t *testing.T) {
 }
 
 func testGetTileSetById(tileSetId, expectedFirstGid int, t *testing.T) {
-	levelData := &levelData{
-		Layers: []*layer{},
-		TileSets: []*tileSet{
+	levelData := &LevelData{
+		Layers: []*Layer{},
+		TileSets: []*TileSet{
 			{FirstGid: 1},
 			{FirstGid: 10},
 			{FirstGid: 15}},
