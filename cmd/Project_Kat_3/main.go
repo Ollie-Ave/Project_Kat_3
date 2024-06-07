@@ -18,7 +18,8 @@ func main() {
 	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera())
 
 	levelRenderer := engine_levels.NewLevelRenderer(entityManager)
-	levelOne, err := levels.NewLevelOne(levelRenderer, entityManager)
+	levelLoader := engine_levels.NewLevelLoader()
+	levelOne, err := levels.NewLevelOne(levelLoader, levelRenderer, entityManager)
 
 	if err != nil {
 		panic(err)
