@@ -5,6 +5,9 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 type levelData struct {
 	Layers   []*layer
 	TileSets []*tileSet
+
+	Width     int
+	TileWidth int
 }
 
 type layer struct {
@@ -20,6 +23,8 @@ type layer struct {
 
 	Height int
 	Width  int
+
+	Parallaxx float32
 
 	Name      string
 	LayerType string `json:"type"`

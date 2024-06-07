@@ -4,11 +4,14 @@ import (
 	"cmp"
 	"slices"
 
+	"github.com/Ollie-Ave/Project_Kat_3/internal/entities"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func newLevelRenderer() levelRenderer {
-	return &levelRendererImpl{}
+func NewLevelRenderer(entityManager entities.EntityManager) LevelRenderer {
+	return &levelRendererImpl{
+		entityManager: entityManager,
+	}
 }
 
 func getNewTilePosition(x, y int, maxX int) (int, int) {
@@ -22,11 +25,12 @@ func getNewTilePosition(x, y int, maxX int) (int, int) {
 	return x, y
 }
 
-type levelRenderer interface {
+type LevelRenderer interface {
 	Render(levelData *levelData)
 }
 
 type levelRendererImpl struct {
+	entityManager entities.EntityManager
 }
 
 func (l *levelRendererImpl) Render(levelData *levelData) {
@@ -42,8 +46,19 @@ func (l *levelRendererImpl) Render(levelData *levelData) {
 	}
 }
 
-func (l *levelRendererImpl) renderImageLayer(layer *layer) {
-	position := rl.NewVector2(0, 200)
+func (l *levelRendererImpl) renderImageLayer(layer *layer) error {
+	cameraEntity, err := l.entityManager.GetCamera()
+
+	if err != nil {
+		return err
+	}
+
+	camera := cameraEntity.GetCamera()
+
+	const backgroundSpeed = 7.5
+	xPos := -(camera.Offset.X / backgroundSpeed) * layer.Parallaxx
+
+	position := rl.NewVector2(xPos, 200)
 	rotation := 0
 	scale := 1.0
 
@@ -77,6 +92,8 @@ func (l *levelRendererImpl) renderImageLayer(layer *layer) {
 			position.X = 0
 		}
 	}
+
+	return nil
 }
 
 func (l *levelRendererImpl) renderTileLayer(layer *layer, levelData *levelData) {

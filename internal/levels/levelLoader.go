@@ -1,9 +1,12 @@
 package levels
 
-import "github.com/Ollie-Ave/Project_Kat_3/internal/shared"
+import (
+	"github.com/Ollie-Ave/Project_Kat_3/internal/entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/shared"
+)
 
-func NewLevelManager() (LevelManager, error) {
-	levelOne, err := initLevelOne()
+func NewLevelManager(levelRenderer LevelRenderer, entityManager entities.EntityManager) (LevelManager, error) {
+	levelOne, err := initLevelOne(levelRenderer, entityManager)
 
 	if err != nil {
 		return nil, err

@@ -12,10 +12,11 @@ import (
 func main() {
 	setupWindow()
 
-	levelManager, err := levels.NewLevelManager()
-
 	entityManager := entities.NewEntityManager()
 	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera())
+
+	levelRenderer := levels.NewLevelRenderer(entityManager)
+	levelManager, err := levels.NewLevelManager(levelRenderer, entityManager)
 
 	if err != nil {
 		panic(err)
@@ -48,8 +49,6 @@ func update(levelManager levels.LevelManager, entityManager entities.EntityManag
 
 	rl.ClearBackground(shared.WindowBackgroundColor)
 
-	renderFPS()
-
 	levelManager.
 		GetLevel().
 		Render()
@@ -59,6 +58,8 @@ func update(levelManager levels.LevelManager, entityManager entities.EntityManag
 	}
 
 	rl.EndMode2D()
+
+	renderFPS()
 
 	rl.EndDrawing()
 
