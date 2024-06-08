@@ -5,11 +5,11 @@
 Below, see a summary of current tasks that either need doing or have been done.
 
 ### To Do
-- Get Tile Map Collision Data
 - Character Rendering
 - Character Physics And Collisions With TileMap Data
 
 ### Done
+- Get Tile Map Collision Data
 - Pull Out Level Data Loader From `levelOne.go` And Stick It In `engine_levels.LevelDataLoader` interface.
 - Pulled out the majority of the engine code into packages prefixed with `engine_`
 - Tile Map Rendering

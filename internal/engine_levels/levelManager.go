@@ -6,22 +6,23 @@ import (
 )
 
 type LevelManager interface {
-	GetLevel() engine_shared.Renderer
+	GetLevel() engine_shared.Renderable
 }
 
 func NewLevelManager(
-	initialLevel engine_shared.Renderer,
+	initialLevel engine_shared.Renderable,
 	levelRenderer LevelRenderer,
-	entityManager engine_entities.EntityManager) (LevelManager, error) {
+	entityManager engine_entities.EntityManager) LevelManager {
+
 	return &LevelManagerImpl{
 		currentLevel: initialLevel,
-	}, nil
+	}
 }
 
 type LevelManagerImpl struct {
-	currentLevel engine_shared.Renderer
+	currentLevel engine_shared.Renderable
 }
 
-func (l *LevelManagerImpl) GetLevel() engine_shared.Renderer {
+func (l *LevelManagerImpl) GetLevel() engine_shared.Renderable {
 	return l.currentLevel
 }

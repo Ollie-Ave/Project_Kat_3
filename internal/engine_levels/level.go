@@ -6,7 +6,9 @@ type LevelData struct {
 	Layers   []*Layer
 	TileSets []*TileSet
 
-	Width     int
+	Width  int
+	Height int
+
 	TileWidth int
 }
 

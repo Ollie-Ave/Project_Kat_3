@@ -8,6 +8,6 @@ type CameraPosessor interface {
 	SetLevelWidth(width int)
 }
 
-type Renderer interface {
+type Renderable interface {
 	Render()
 }

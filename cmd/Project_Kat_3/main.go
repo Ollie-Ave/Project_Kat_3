@@ -5,6 +5,7 @@ import (
 
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_levels"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/entities"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/levels"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/shared"
@@ -14,7 +15,7 @@ import (
 func main() {
 	setupWindow()
 
-	entityManager := entities.NewEntityManager()
+	entityManager := engine_entities.NewEntityManager()
 	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera())
 
 	levelRenderer := engine_levels.NewLevelRenderer(entityManager)
@@ -25,13 +26,7 @@ func main() {
 		panic(err)
 	}
 
-	levelManager, err := engine_levels.NewLevelManager(levelOne, levelRenderer, entityManager)
-
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Starting Game")
+	levelManager := engine_levels.NewLevelManager(levelOne, levelRenderer, entityManager)
 
 	for !rl.WindowShouldClose() {
 		update(levelManager, entityManager)
@@ -64,6 +59,10 @@ func update(levelManager engine_levels.LevelManager, entityManager engine_entiti
 
 	for _, entity := range entityManager.GetEntities() {
 		entity.Update()
+
+		if entity, ok := entity.(engine_shared.Renderable); ok {
+			entity.Render()
+		}
 	}
 
 	rl.EndMode2D()

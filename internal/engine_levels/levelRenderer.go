@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -34,13 +35,11 @@ type levelRendererImpl struct {
 }
 
 func (l *levelRendererImpl) Render(levelData *LevelData) {
-	const tileLayer = "tilelayer"
-	const imageLayer = "imagelayer"
 
 	for _, layer := range levelData.Layers {
-		if layer.LayerType == tileLayer {
+		if layer.LayerType == engine_shared.TileLayer {
 			l.renderTileLayer(layer, levelData)
-		} else if layer.LayerType == imageLayer {
+		} else if layer.LayerType == engine_shared.ImageLayer {
 			l.renderImageLayer(layer)
 		}
 	}
