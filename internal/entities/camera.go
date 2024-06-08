@@ -1,29 +1,30 @@
 package entities
 
 import (
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/shared"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func NewCamera() *Camera {
+func NewCamera() engine_entities.EntityUpdatable {
 	defaultOffset := rl.NewVector2(0, -300)
 	defaultTarget := rl.NewVector2(0, 0)
 	defaultRotation := float32(0)
 	defaultZoom := float32(2)
 
-	return &Camera{
+	return &camera{
 		camera:     rl.NewCamera2D(defaultOffset, defaultTarget, defaultRotation, defaultZoom),
 		levelWidth: 0,
 	}
 }
 
-type Camera struct {
+type camera struct {
 	camera rl.Camera2D
 
 	levelWidth int
 }
 
-func (c *Camera) Update() {
+func (c *camera) Update() {
 	const cameraSpeed = 8
 
 	if rl.IsKeyDown(rl.KeyD) {
@@ -43,10 +44,10 @@ func (c *Camera) Update() {
 	}
 }
 
-func (c *Camera) GetCamera() rl.Camera2D {
+func (c *camera) GetCamera() rl.Camera2D {
 	return c.camera
 }
 
-func (c *Camera) SetLevelWidth(width int) {
+func (c *camera) SetLevelWidth(width int) {
 	c.levelWidth = width
 }
