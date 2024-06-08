@@ -28,7 +28,7 @@ func NewLevelOne(
 
 	camera.SetLevelWidth(levelData.TileWidth * levelData.Width)
 
-	levelCollider := newLevelCollider(levelData)
+	levelCollider := engine_levels.NewLevelCollider(levelData)
 	entityManager.SetLevelCollider(levelCollider)
 
 	return &levelOne{
@@ -48,50 +48,4 @@ type levelOne struct {
 
 func (l *levelOne) Render() {
 	l.levelRenderer.Render(l.levelData)
-}
-
-func newLevelCollider(levelData *engine_levels.LevelData) engine_entities.EntityUpdatable {
-	layerCollisionData := make(map[string][][]bool)
-
-	for _, layer := range levelData.Layers {
-
-		if layer.LayerType == engine_shared.TileLayer {
-			layerCollisionData[layer.Name] = parseCollisionDataForLayer(layer, levelData)
-		}
-	}
-
-	return &levelCollider{
-		layerCollisionData: layerCollisionData,
-	}
-}
-
-func parseCollisionDataForLayer(layer *engine_levels.Layer, levelData *engine_levels.LevelData) [][]bool {
-	collisionData := assign2DArrayBuffer[bool](levelData.Width, levelData.Height)
-
-	for y := 0; y < levelData.Height; y++ {
-		for x := 0; x < levelData.Width; x++ {
-			layerDataIndex := y*levelData.Width + x
-
-			collisionData[y][x] = layer.Data[layerDataIndex] != 0
-		}
-	}
-
-	return collisionData
-}
-
-func assign2DArrayBuffer[T any](rows, cols int) [][]T {
-	buffer := make([][]T, cols)
-
-	for i := range buffer {
-		buffer[i] = make([]T, rows)
-	}
-
-	return buffer
-}
-
-type levelCollider struct {
-	layerCollisionData map[string][][]bool
-}
-
-func (l *levelCollider) Update() {
 }
