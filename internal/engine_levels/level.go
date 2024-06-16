@@ -9,7 +9,8 @@ type LevelData struct {
 	Width  int
 	Height int
 
-	TileWidth int
+	TileWidth  int
+	TileHeight int
 }
 
 type Layer struct {

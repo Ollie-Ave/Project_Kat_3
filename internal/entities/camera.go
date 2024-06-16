@@ -6,7 +6,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func NewCamera() engine_entities.EntityUpdatable {
+func NewCamera() engine_entities.EntityUpdater {
 	defaultOffset := rl.NewVector2(0, -300)
 	defaultTarget := rl.NewVector2(0, 0)
 	defaultRotation := float32(0)
@@ -24,7 +24,7 @@ type camera struct {
 	levelWidth int
 }
 
-func (c *camera) Update() {
+func (c *camera) Update() error {
 	const cameraSpeed = 8
 
 	if rl.IsKeyDown(rl.KeyD) {
@@ -42,6 +42,8 @@ func (c *camera) Update() {
 			c.camera.Offset.X = 0
 		}
 	}
+
+	return nil
 }
 
 func (c *camera) GetCamera() rl.Camera2D {

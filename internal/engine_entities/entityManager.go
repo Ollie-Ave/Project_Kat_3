@@ -8,30 +8,32 @@ import (
 )
 
 type EntityManager interface {
-	SpawnEntity(string, EntityUpdatable)
+	SpawnEntity(string, EntityUpdater)
 
-	SetLevelCollider(EntityUpdatable)
+	SetLevelCollider(EntityUpdater)
 
-	GetEntities() map[string]EntityUpdatable
+	GetLevelCollider() engine_shared.LevelCollider
 
-	GetEntityById(string) (EntityUpdatable, error)
+	GetEntities() map[string]EntityUpdater
+
+	GetEntityById(string) (EntityUpdater, error)
 
 	GetCamera() (engine_shared.CameraPosessor, error)
 }
 
 func NewEntityManager() EntityManager {
 	return &EntityManagerImpl{
-		entities:           make(map[string]EntityUpdatable),
+		entities:           make(map[string]EntityUpdater),
 		duplicateEntityIds: make(map[string]int),
 	}
 }
 
 type EntityManagerImpl struct {
-	entities           map[string]EntityUpdatable
+	entities           map[string]EntityUpdater
 	duplicateEntityIds map[string]int
 }
 
-func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdatable) {
+func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdater) {
 	if e.entities[id] != nil {
 		e.duplicateEntityIds[id]++
 
@@ -41,11 +43,11 @@ func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdatable) {
 	e.entities[id] = entity
 }
 
-func (e *EntityManagerImpl) GetEntities() map[string]EntityUpdatable {
+func (e *EntityManagerImpl) GetEntities() map[string]EntityUpdater {
 	return e.entities
 }
 
-func (e *EntityManagerImpl) GetEntityById(id string) (EntityUpdatable, error) {
+func (e *EntityManagerImpl) GetEntityById(id string) (EntityUpdater, error) {
 	entity := e.entities[id]
 
 	if entity == nil {
@@ -65,6 +67,10 @@ func (e *EntityManagerImpl) GetCamera() (engine_shared.CameraPosessor, error) {
 	return camera.(engine_shared.CameraPosessor), nil
 }
 
-func (e *EntityManagerImpl) SetLevelCollider(entity EntityUpdatable) {
+func (e *EntityManagerImpl) SetLevelCollider(entity EntityUpdater) {
 	e.entities[engine_shared.LevelColliderEntityName] = entity
+}
+
+func (e *EntityManagerImpl) GetLevelCollider() engine_shared.LevelCollider {
+	return e.entities[engine_shared.LevelColliderEntityName].(engine_shared.LevelCollider)
 }

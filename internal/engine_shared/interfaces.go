@@ -11,3 +11,7 @@ type CameraPosessor interface {
 type Renderable interface {
 	Render()
 }
+
+type LevelCollider interface {
+	GetLayerCollisionData(layerName string) ([][]bool, int, int)
+}

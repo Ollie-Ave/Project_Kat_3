@@ -9,4 +9,8 @@ const (
 
 	TileLayer  = "tilelayer"
 	ImageLayer = "imagelayer"
+
+	GroundLayerName = "Ground"
+
+	DebugModeEnvironmentVariable = "DEBUG"
 )

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_levels"
@@ -18,7 +19,12 @@ func main() {
 	entityManager := engine_entities.NewEntityManager()
 	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera())
 
-	player, err := entities.NewPlayer(rl.NewVector2(200, 150))
+	playerStartingPosition := rl.NewVector2(200, 150)
+	player, err := entities.NewPlayer(
+		playerStartingPosition,
+		entityManager,
+		engine_entities.NewPhysicsHandler(entityManager),
+	)
 
 	if err != nil {
 		panic(err)
@@ -80,7 +86,7 @@ func update(levelManager engine_levels.LevelManager, entityManager engine_entiti
 
 	rl.EndDrawing()
 
-	renderFPS()
+	handleDebugMode()
 }
 
 func beginCameraMode2D(entityManager engine_entities.EntityManager) error {
@@ -99,4 +105,16 @@ func renderFPS() {
 	fpsText := fmt.Sprintf("FPS: %d", rl.GetFPS())
 
 	rl.DrawText(fpsText, 10, 10, 20, rl.White)
+}
+
+func handleDebugMode() {
+	if rl.IsKeyReleased(rl.KeyF3) {
+		newDebugState := "true"
+
+		if os.Getenv(engine_shared.DebugModeEnvironmentVariable) == "true" {
+			newDebugState = "false"
+		}
+
+		os.Setenv(engine_shared.DebugModeEnvironmentVariable, newDebugState)
+	}
 }

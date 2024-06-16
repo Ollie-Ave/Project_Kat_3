@@ -5,7 +5,7 @@ import (
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
 )
 
-func NewLevelCollider(levelData *LevelData) engine_entities.EntityUpdatable {
+func NewLevelCollider(levelData *LevelData) engine_entities.EntityUpdater {
 	layerCollisionData := make(map[string][][]bool)
 
 	for _, layer := range levelData.Layers {
@@ -15,8 +15,10 @@ func NewLevelCollider(levelData *LevelData) engine_entities.EntityUpdatable {
 		}
 	}
 
-	return &levelCollider{
+	return &levelColliderImpl{
 		layerCollisionData: layerCollisionData,
+		tileWidth:          levelData.TileWidth,
+		tileHeight:         levelData.TileHeight,
 	}
 }
 
@@ -44,9 +46,17 @@ func assign2DArrayBuffer[T any](rows, cols int) [][]T {
 	return buffer
 }
 
-type levelCollider struct {
+type levelColliderImpl struct {
 	layerCollisionData map[string][][]bool
+
+	tileWidth  int
+	tileHeight int
 }
 
-func (l *levelCollider) Update() {
+func (l *levelColliderImpl) Update() error {
+	return nil
+}
+
+func (l *levelColliderImpl) GetLayerCollisionData(layerName string) ([][]bool, int, int) {
+	return l.layerCollisionData[layerName], l.tileWidth, l.tileHeight
 }
