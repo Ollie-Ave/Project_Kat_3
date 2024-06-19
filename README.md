@@ -5,11 +5,12 @@
 Below, see a summary of current tasks that either need doing or have been done.
 
 ### To Do
-- Update Player Sprite to New.
-- Do player walking animation.
-- Camera.
+- Fix bug with falling animation when facing left.
+- Camera movement.
 
 ### Done
+- Do player walking animation.
+- Update Player Sprite to New.
 - Character Rendering
 - Character Physics And Collisions With TileMap Data
 - Get Tile Map Collision Data
