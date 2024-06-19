@@ -5,10 +5,13 @@
 Below, see a summary of current tasks that either need doing or have been done.
 
 ### To Do
-- Character Rendering
-- Character Physics And Collisions With TileMap Data
+- Update Player Sprite to New.
+- Do player walking animation.
+- Camera.
 
 ### Done
+- Character Rendering
+- Character Physics And Collisions With TileMap Data
 - Get Tile Map Collision Data
 - Pull Out Level Data Loader From `levelOne.go` And Stick It In `engine_levels.LevelDataLoader` interface.
 - Pulled out the majority of the engine code into packages prefixed with `engine_`
