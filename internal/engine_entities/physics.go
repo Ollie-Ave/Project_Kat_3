@@ -130,7 +130,7 @@ func (p *physicsHandlerImpl) handleCollisionOnBottomSide(
 	if rl.CheckCollisionRecs(entityCollider, tileCollider) && velocityMut.Y < 0 {
 		velocityMut.Y = 0
 
-		positionMut.Y = tileHitbox.Y - (handlerData.HitboxDimensions.Y + handlerData.HitboxDimensions.Y)
+		positionMut.Y = tileHitbox.Y - (handlerData.HitboxDimensions.Height + handlerData.HitboxDimensions.Y)
 	}
 }
 

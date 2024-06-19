@@ -26,10 +26,10 @@ func NewPlayer(
 	}
 
 	playerHitboxDimensions := rl.NewRectangle(
-		40,
-		40,
-		32,
-		40,
+		24,
+		16,
+		46,
+		64,
 	)
 
 	return &player{
@@ -50,7 +50,7 @@ func NewPlayer(
 func loadAnimationData() (map[string]animationData, error) {
 	animations := map[string]animationData{
 		idleAnimationName: {
-			TexturePath: "_Idle.png",
+			TexturePath: "PlayerIdle.png",
 			FrameCount:  10,
 		},
 	}
@@ -143,7 +143,8 @@ func (p *player) Render() {
 		currentAnimation.Texture,
 		textureSourceRec,
 		p.Position,
-		rl.White)
+		rl.White,
+	)
 
 	if os.Getenv(engine_shared.DebugModeEnvironmentVariable) != "true" {
 		return
