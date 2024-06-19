@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
@@ -10,16 +9,38 @@ import (
 )
 
 const (
-	idleAnimationName = "idle"
+	PlayerIdleAnimation = iota
+	PlayerRunAnimation
+	PlayerJumpAnimation
+	PlayerFallAnimation
 )
 
 func NewPlayer(
 	initialPosition rl.Vector2,
 	entityMangaer engine_entities.EntityManager,
 	physicsHandler engine_entities.PhysicsHandler,
+	animationHandler engine_entities.AnimationHandler,
 ) (engine_entities.EntityUpdater, error) {
+	animations := map[int]engine_entities.AnimationData{
+		PlayerIdleAnimation: engine_entities.NewAnimationData(
+			"PlayerIdle.png",
+			10,
+			150,
+		),
+		PlayerRunAnimation: engine_entities.NewAnimationData(
+			"PlayerRun.png",
+			8,
+			85,
+		),
+		PlayerJumpAnimation: engine_entities.NewAnimationDataEx(
+			"PlayerJump.png",
+			3,
+			150,
+			false,
+		),
+	}
 
-	animations, err := loadAnimationData()
+	err := animationHandler.LoadAnimations(animations)
 
 	if err != nil {
 		return nil, err
@@ -37,57 +58,15 @@ func NewPlayer(
 		HitboxDimensions: playerHitboxDimensions,
 		Position:         initialPosition,
 		PhysicsHandler:   physicsHandler,
-		AnimationMeta: animationMeta{
-			CurrentAnimationFrame:    0,
-			CurrentAnimation:         idleAnimationName,
-			TimeSinceLastFrameChange: 0,
-			TimeBetweenFrameChange:   150,
-		},
-		Animations: animations,
+		AnimationHandler: animationHandler,
 	}, nil
-}
-
-func loadAnimationData() (map[string]animationData, error) {
-	animations := map[string]animationData{
-		idleAnimationName: {
-			TexturePath: "PlayerIdle.png",
-			FrameCount:  10,
-		},
-	}
-
-	for _, animation := range animations {
-		const playerSpritePath = "entities/player"
-		playerSpriteFullPath := fmt.Sprintf(
-			"%s/%s/%s",
-			engine_shared.AssetsPath,
-			playerSpritePath,
-			animation.TexturePath)
-
-		_, err := os.Stat(playerSpriteFullPath)
-
-		if err != nil {
-			return nil, err
-		}
-
-		animation.Texture = rl.LoadTexture(playerSpriteFullPath)
-
-		animation.FrameSize = rl.NewVector2(
-			float32(animation.Texture.Width/int32(animation.FrameCount)),
-			float32(animation.Texture.Height))
-
-		animations[idleAnimationName] = animation
-	}
-
-	return animations, nil
 }
 
 type player struct {
 	EntityManager engine_entities.EntityManager
 
-	Position      rl.Vector2
-	AnimationMeta animationMeta
-
-	Animations map[string]animationData
+	Position         rl.Vector2
+	AnimationHandler engine_entities.AnimationHandler
 
 	Velocity         rl.Vector2
 	HitboxDimensions rl.Rectangle
@@ -95,27 +74,11 @@ type player struct {
 	PhysicsHandler engine_entities.PhysicsHandler
 }
 
-type animationMeta struct {
-	CurrentAnimationFrame int
-	CurrentAnimation      string
-
-	TimeSinceLastFrameChange int
-	TimeBetweenFrameChange   int
-}
-
-type animationData struct {
-	Texture rl.Texture2D
-
-	TexturePath string
-	FrameSize   rl.Vector2
-	FrameCount  int
-}
-
 func (p *player) Update() error {
-	p.handleAnimation()
 
 	p.handleMovementInput(&p.Velocity)
 	p.handlePhysics(&p.Velocity, &p.Position)
+	p.handleAnimations()
 
 	p.Position.X += p.Velocity.X
 	p.Position.Y -= p.Velocity.Y
@@ -132,19 +95,7 @@ func (p *player) GetHitbox() rl.Rectangle {
 }
 
 func (p *player) Render() {
-	currentAnimation := p.Animations[p.AnimationMeta.CurrentAnimation]
-	textureSourceRec := rl.NewRectangle(
-		currentAnimation.FrameSize.X*float32(p.AnimationMeta.CurrentAnimationFrame+1),
-		0,
-		currentAnimation.FrameSize.X,
-		currentAnimation.FrameSize.Y)
-
-	rl.DrawTextureRec(
-		currentAnimation.Texture,
-		textureSourceRec,
-		p.Position,
-		rl.White,
-	)
+	p.AnimationHandler.RenderAnimationFrame(p.Position)
 
 	if os.Getenv(engine_shared.DebugModeEnvironmentVariable) != "true" {
 		return
@@ -161,14 +112,15 @@ func (p *player) Render() {
 }
 
 func (p *player) handleMovementInput(velocityMut *rl.Vector2) {
-	const speed = 5
+	const speed = 300
 
 	velocityMut.X = 0
+	deltaTime := rl.GetFrameTime()
 
 	if rl.IsKeyDown(rl.KeyD) {
-		velocityMut.X = speed
+		velocityMut.X = speed * deltaTime
 	} else if rl.IsKeyDown(rl.KeyA) {
-		velocityMut.X = -speed
+		velocityMut.X = -speed * deltaTime
 	}
 
 	hitbox := p.GetHitbox()
@@ -186,16 +138,24 @@ func (p *player) handlePhysics(velocityMut *rl.Vector2, positionMut *rl.Vector2)
 	p.PhysicsHandler.HandlePhysics(handlerData, velocityMut, positionMut)
 }
 
-func (p *player) handleAnimation() {
-	p.AnimationMeta.TimeSinceLastFrameChange += int(rl.GetFrameTime() * 1000)
+func (p *player) handleAnimations() {
+	playerHitbox := p.GetHitbox()
 
-	if p.AnimationMeta.TimeSinceLastFrameChange >= p.AnimationMeta.TimeBetweenFrameChange {
-		p.AnimationMeta.CurrentAnimationFrame++
-
-		p.AnimationMeta.TimeSinceLastFrameChange = 0
+	if !p.PhysicsHandler.IsTouchingGround(&playerHitbox) {
+		p.AnimationHandler.SetAnimation(PlayerJumpAnimation)
+	} else if p.Velocity.X == 0 {
+		p.AnimationHandler.SetAnimation(PlayerIdleAnimation)
+	} else if p.Velocity.X < 0 {
+		p.AnimationHandler.SetAnimation(PlayerRunAnimation)
+	} else if p.Velocity.X > 0 {
+		p.AnimationHandler.SetAnimation(PlayerRunAnimation)
 	}
 
-	if p.AnimationMeta.CurrentAnimationFrame >= p.Animations[p.AnimationMeta.CurrentAnimation].FrameCount {
-		p.AnimationMeta.CurrentAnimationFrame = 0
+	if p.Velocity.X < 0 {
+		p.AnimationHandler.SetDirection("left")
+	} else if p.Velocity.X > 0 {
+		p.AnimationHandler.SetDirection("right")
 	}
+
+	p.AnimationHandler.HandleAnimation()
 }

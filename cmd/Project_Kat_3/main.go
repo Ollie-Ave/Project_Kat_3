@@ -24,6 +24,7 @@ func main() {
 		playerStartingPosition,
 		entityManager,
 		engine_entities.NewPhysicsHandler(entityManager),
+		engine_entities.NewAnimationHandler(entities.PlayerIdleAnimation),
 	)
 
 	if err != nil {
@@ -54,6 +55,8 @@ func setupWindow() {
 
 	rl.SetTargetFPS(shared.WindowTargetFPS)
 	rl.SetExitKey(shared.WindowExitKey)
+
+	rl.SetConfigFlags(rl.FlagVsyncHint)
 }
 
 func update(levelManager engine_levels.LevelManager, entityManager engine_entities.EntityManager) {

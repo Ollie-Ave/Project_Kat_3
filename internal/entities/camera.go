@@ -25,10 +25,12 @@ type camera struct {
 }
 
 func (c *camera) Update() error {
-	const cameraSpeed = 8
+	const cameraSpeed = 400
+
+	deltaTime := rl.GetFrameTime()
 
 	if rl.IsKeyDown(rl.KeyD) {
-		c.camera.Offset.X -= cameraSpeed
+		c.camera.Offset.X -= cameraSpeed * deltaTime
 
 		maxTargetX := -(float32(c.levelWidth) * c.camera.Zoom) + shared.WindowWidth
 
@@ -36,7 +38,7 @@ func (c *camera) Update() error {
 			c.camera.Offset.X = float32(maxTargetX)
 		}
 	} else if rl.IsKeyDown(rl.KeyA) {
-		c.camera.Offset.X += cameraSpeed
+		c.camera.Offset.X += cameraSpeed * deltaTime
 
 		if c.camera.Offset.X >= 0 {
 			c.camera.Offset.X = 0

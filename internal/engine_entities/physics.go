@@ -12,7 +12,7 @@ const (
 
 type PhysicsHandler interface {
 	HandlePhysics(*physicsHandlerData, *rl.Vector2, *rl.Vector2)
-	IsTouchingGround(*rl.Rectangle) bool
+	IsTouchingGround(hitbox *rl.Rectangle) bool
 }
 
 type physicsHandlerImpl struct {
@@ -220,7 +220,7 @@ func (p *physicsHandlerImpl) handleCollisionOnRightSide(
 	if bottomSideCollides && velocity.X > 0 {
 		velocity.X = 0
 
-		positionMut.X = tileHitbox.X - tileHitbox.Width - handlerData.HitboxDimensions.X - tileColliderWidth
+		positionMut.X = tileHitbox.X - handlerData.HitboxDimensions.Width - handlerData.HitboxDimensions.X - tileColliderWidth
 	}
 }
 
