@@ -26,11 +26,13 @@ func TestGetTileSetByIdWith20(t *testing.T) {
 
 func testGetTileSetById(tileSetId, expectedFirstGid int, t *testing.T) {
 	levelData := &LevelData{
-		Layers: []*Layer{},
-		TileSets: []*TileSet{
-			{FirstGid: 1},
-			{FirstGid: 10},
-			{FirstGid: 15}},
+		CurrentTimePeriod: &LevelTimePeriod{
+			Layers: []*Layer{},
+			TileSets: []*TileSet{
+				{FirstGid: 1},
+				{FirstGid: 10},
+				{FirstGid: 15}},
+		},
 	}
 
 	levelRenderer := &levelRendererImpl{}

@@ -14,4 +14,6 @@ type Renderable interface {
 
 type LevelCollider interface {
 	GetLayerCollisionData(layerName string) ([][]bool, int, int)
+
+	SetTimePeriod(timePeriod string) error
 }

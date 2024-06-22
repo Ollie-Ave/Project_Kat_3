@@ -14,17 +14,44 @@ func NewLevelLoader() LevelLoader {
 }
 
 type LevelLoader interface {
-	LoadLevelData(filePath *string) (*LevelData, error)
+	LoadLevelData(futureTimeFilePath, pastTimeFilePath, defaultTimePeriod string) (*LevelData, error)
 }
 
 type levelLoaderImpl struct {
 }
 
-func (l *levelLoaderImpl) LoadLevelData(filePath *string) (*LevelData, error) {
+func (l *levelLoaderImpl) LoadLevelData(futureTimeFilePath, pastTimeFilePath, defaultTimePeriod string) (*LevelData, error) {
+	futureTimePeriodData, err := l.loadTimePeriodData(futureTimeFilePath)
 
-	var levelData *LevelData
+	if err != nil {
+		return nil, err
+	}
 
-	levelFile, err := os.ReadFile(*filePath)
+	pastTimePeriodData, err := l.loadTimePeriodData(pastTimeFilePath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var currentTimePeriod *LevelTimePeriod
+
+	if defaultTimePeriod == FutureTimePeriod {
+		currentTimePeriod = futureTimePeriodData
+	} else {
+		currentTimePeriod = pastTimePeriodData
+	}
+
+	return &LevelData{
+		CurrentTimePeriod: currentTimePeriod,
+		PastPeriod:        pastTimePeriodData,
+		FuturePeriod:      futureTimePeriodData,
+	}, nil
+}
+
+func (l *levelLoaderImpl) loadTimePeriodData(filePath string) (*LevelTimePeriod, error) {
+	var levelData *LevelTimePeriod
+
+	levelFile, err := os.ReadFile(filePath)
 
 	if err != nil {
 		return nil, err
@@ -61,5 +88,4 @@ func (l *levelLoaderImpl) LoadLevelData(filePath *string) (*LevelData, error) {
 	}
 
 	return levelData, nil
-
 }

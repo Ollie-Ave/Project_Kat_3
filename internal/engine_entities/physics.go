@@ -1,6 +1,8 @@
 package engine_entities
 
 import (
+	"os"
+
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -85,7 +87,7 @@ func (p *physicsHandlerImpl) handleTileMapCollisions(
 ) {
 	levelCollider := p.EntityManager.GetLevelCollider()
 
-	collisionData, tileWidth, tileHeight := levelCollider.GetLayerCollisionData("Ground")
+	collisionData, tileWidth, tileHeight := levelCollider.GetLayerCollisionData(engine_shared.GroundLayerName)
 
 	for y, collisionRow := range collisionData {
 		for x, shouldCollide := range collisionRow {
@@ -126,6 +128,16 @@ func (p *physicsHandlerImpl) handleCollisionOnBottomSide(
 		tileHitbox.Width,
 		tileColliderHeight,
 	)
+
+	if os.Getenv(engine_shared.DebugModeEnvironmentVariable) == "true" {
+		rl.DrawRectangleLines(
+			int32(tileCollider.X),
+			int32(tileCollider.Y),
+			int32(tileCollider.Width),
+			int32(tileCollider.Height),
+			rl.Purple,
+		)
+	}
 
 	if rl.CheckCollisionRecs(entityCollider, tileCollider) && velocityMut.Y < 0 {
 		velocityMut.Y = 0

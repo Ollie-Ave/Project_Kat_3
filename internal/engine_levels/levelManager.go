@@ -2,15 +2,14 @@ package engine_levels
 
 import (
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
-	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
 )
 
 type LevelManager interface {
-	GetLevel() engine_shared.Renderable
+	GetLevel() LevelHandler
 }
 
 func NewLevelManager(
-	initialLevel engine_shared.Renderable,
+	initialLevel LevelHandler,
 	levelRenderer LevelRenderer,
 	entityManager engine_entities.EntityManager) LevelManager {
 
@@ -20,9 +19,9 @@ func NewLevelManager(
 }
 
 type LevelManagerImpl struct {
-	currentLevel engine_shared.Renderable
+	currentLevel LevelHandler
 }
 
-func (l *LevelManagerImpl) GetLevel() engine_shared.Renderable {
+func (l *LevelManagerImpl) GetLevel() LevelHandler {
 	return l.currentLevel
 }

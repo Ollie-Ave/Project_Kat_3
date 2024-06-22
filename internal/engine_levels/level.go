@@ -1,8 +1,28 @@
 package engine_levels
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
+
+const (
+	PastTimePeriod   = "Past"
+	FutureTimePeriod = "Future"
+)
+
+type LevelHandler interface {
+	Update()
+	GetTimePeriod() string
+	engine_shared.Renderable
+}
 
 type LevelData struct {
+	PastPeriod        *LevelTimePeriod
+	FuturePeriod      *LevelTimePeriod
+	CurrentTimePeriod *LevelTimePeriod
+}
+
+type LevelTimePeriod struct {
 	Layers   []*Layer
 	TileSets []*TileSet
 

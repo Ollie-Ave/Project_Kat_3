@@ -36,7 +36,7 @@ type levelRendererImpl struct {
 
 func (l *levelRendererImpl) Render(levelData *LevelData) {
 
-	for _, layer := range levelData.Layers {
+	for _, layer := range levelData.CurrentTimePeriod.Layers {
 		if layer.LayerType == engine_shared.TileLayer {
 			l.renderTileLayer(layer, levelData)
 		} else if layer.LayerType == engine_shared.ImageLayer {
@@ -139,11 +139,11 @@ func (l *levelRendererImpl) getTileData(tileId int, levelData *LevelData) *Tile 
 func (l *levelRendererImpl) getTileSetById(id int, levelData *LevelData) *TileSet {
 	var returnValue *TileSet
 
-	slices.SortFunc(levelData.TileSets, func(a, b *TileSet) int {
+	slices.SortFunc(levelData.CurrentTimePeriod.TileSets, func(a, b *TileSet) int {
 		return cmp.Compare(a.FirstGid, b.FirstGid)
 	})
 
-	for _, tileSet := range levelData.TileSets {
+	for _, tileSet := range levelData.CurrentTimePeriod.TileSets {
 		if tileSet.FirstGid > id {
 			return returnValue
 		}

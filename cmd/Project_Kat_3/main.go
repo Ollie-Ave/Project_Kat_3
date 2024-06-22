@@ -71,9 +71,9 @@ func update(levelManager engine_levels.LevelManager, entityManager engine_entiti
 
 	rl.ClearBackground(shared.WindowBackgroundColor)
 
-	levelManager.
-		GetLevel().
-		Render()
+	level := levelManager.GetLevel()
+	level.Render()
+	level.Update()
 
 	for _, entity := range entityManager.GetEntities() {
 
@@ -87,6 +87,7 @@ func update(levelManager engine_levels.LevelManager, entityManager engine_entiti
 	rl.EndMode2D()
 
 	renderFPS()
+	renderTimePeriod(level)
 
 	rl.EndDrawing()
 
@@ -109,6 +110,12 @@ func renderFPS() {
 	fpsText := fmt.Sprintf("FPS: %d", rl.GetFPS())
 
 	rl.DrawText(fpsText, 10, 10, 20, rl.White)
+}
+
+func renderTimePeriod(level engine_levels.LevelHandler) {
+	fpsText := fmt.Sprintf("Time Period: %s", level.GetTimePeriod())
+
+	rl.DrawText(fpsText, 10, 40, 20, rl.White)
 }
 
 func handleDebugMode() {

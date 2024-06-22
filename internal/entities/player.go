@@ -85,6 +85,11 @@ func (p *player) Update() error {
 	p.Position.X += p.Velocity.X
 	p.Position.Y -= p.Velocity.Y
 
+	if p.Position.Y > 1000 {
+		p.Position = rl.NewVector2(50, 150)
+		p.Velocity = rl.Vector2Zero()
+	}
+
 	return nil
 }
 
