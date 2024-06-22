@@ -22,18 +22,18 @@ type EntityManager interface {
 }
 
 func NewEntityManager() EntityManager {
-	return &EntityManagerImpl{
+	return &entityManagerImpl{
 		entities:           make(map[string]EntityUpdater),
 		duplicateEntityIds: make(map[string]int),
 	}
 }
 
-type EntityManagerImpl struct {
+type entityManagerImpl struct {
 	entities           map[string]EntityUpdater
 	duplicateEntityIds map[string]int
 }
 
-func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdater) {
+func (e *entityManagerImpl) SpawnEntity(id string, entity EntityUpdater) {
 	if e.entities[id] != nil {
 		e.duplicateEntityIds[id]++
 
@@ -43,11 +43,11 @@ func (e *EntityManagerImpl) SpawnEntity(id string, entity EntityUpdater) {
 	e.entities[id] = entity
 }
 
-func (e *EntityManagerImpl) GetEntities() map[string]EntityUpdater {
+func (e *entityManagerImpl) GetEntities() map[string]EntityUpdater {
 	return e.entities
 }
 
-func (e *EntityManagerImpl) GetEntityById(id string) (EntityUpdater, error) {
+func (e *entityManagerImpl) GetEntityById(id string) (EntityUpdater, error) {
 	entity := e.entities[id]
 
 	if entity == nil {
@@ -57,7 +57,7 @@ func (e *EntityManagerImpl) GetEntityById(id string) (EntityUpdater, error) {
 	return entity, nil
 }
 
-func (e *EntityManagerImpl) GetCamera() (engine_shared.CameraPosessor, error) {
+func (e *entityManagerImpl) GetCamera() (engine_shared.CameraPosessor, error) {
 	camera, err := e.GetEntityById(shared.CameraEntityName)
 
 	if err != nil {
@@ -67,10 +67,10 @@ func (e *EntityManagerImpl) GetCamera() (engine_shared.CameraPosessor, error) {
 	return camera.(engine_shared.CameraPosessor), nil
 }
 
-func (e *EntityManagerImpl) SetLevelCollider(entity EntityUpdater) {
+func (e *entityManagerImpl) SetLevelCollider(entity EntityUpdater) {
 	e.entities[engine_shared.LevelColliderEntityName] = entity
 }
 
-func (e *EntityManagerImpl) GetLevelCollider() engine_shared.LevelCollider {
+func (e *entityManagerImpl) GetLevelCollider() engine_shared.LevelCollider {
 	return e.entities[engine_shared.LevelColliderEntityName].(engine_shared.LevelCollider)
 }

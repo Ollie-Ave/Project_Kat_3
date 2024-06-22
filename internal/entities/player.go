@@ -13,6 +13,8 @@ const (
 	PlayerRunAnimation
 	PlayerJumpAnimation
 	PlayerFallAnimation
+
+	playerSpeed = 300
 )
 
 func NewPlayer(
@@ -112,15 +114,14 @@ func (p *player) Render() {
 }
 
 func (p *player) handleMovementInput(velocityMut *rl.Vector2) {
-	const speed = 300
 
 	velocityMut.X = 0
 	deltaTime := rl.GetFrameTime()
 
 	if rl.IsKeyDown(rl.KeyD) {
-		velocityMut.X = speed * deltaTime
+		velocityMut.X = playerSpeed * deltaTime
 	} else if rl.IsKeyDown(rl.KeyA) {
-		velocityMut.X = -speed * deltaTime
+		velocityMut.X = -playerSpeed * deltaTime
 	}
 
 	hitbox := p.GetHitbox()

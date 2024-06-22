@@ -16,10 +16,11 @@ import (
 func main() {
 	setupWindow()
 
-	entityManager := engine_entities.NewEntityManager()
-	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera())
+	playerStartingPosition := rl.NewVector2(50, 150)
 
-	playerStartingPosition := rl.NewVector2(200, 150)
+	entityManager := engine_entities.NewEntityManager()
+	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera(playerStartingPosition.X, entityManager))
+
 	player, err := entities.NewPlayer(
 		playerStartingPosition,
 		entityManager,

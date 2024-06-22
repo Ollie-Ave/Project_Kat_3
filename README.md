@@ -5,9 +5,10 @@
 Below, see a summary of current tasks that either need doing or have been done.
 
 ### To Do
-- Camera movement.
+- Time travel world mechanic.
 
 ### Done
+- Camera movement.
 - Fix bug with falling animation when facing left.
 - Do player walking animation.
 - Update Player Sprite to New.

@@ -110,7 +110,6 @@ func (a *AnimationHandlerImpl) RenderAnimationFrame(position rl.Vector2) {
 
 func (a *AnimationHandlerImpl) HandleAnimation() {
 	a.AnimationMeta.TimeSinceLastFrameChange += int(rl.GetFrameTime() * 1000)
-	fmt.Println(a.AnimationMeta.CurrentAnimationFrame)
 
 	if a.AnimationMeta.TimeSinceLastFrameChange >= a.Animations[a.AnimationMeta.CurrentAnimation].TimeBetweenFrameChange {
 		if a.AnimationMeta.CurrentAnimationFrame < a.Animations[a.AnimationMeta.CurrentAnimation].FrameCount-1 {
