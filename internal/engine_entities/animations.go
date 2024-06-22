@@ -93,9 +93,9 @@ func (a *AnimationHandlerImpl) RenderAnimationFrame(position rl.Vector2) {
 
 	if a.AnimationMeta.Direction {
 		textureSourceRec = rl.NewRectangle(
-			textureSourceRec.X+textureSourceRec.Width, // Move X to the end of the frame
+			textureSourceRec.X,
 			textureSourceRec.Y,
-			-textureSourceRec.Width, // Invert the width to flip
+			-textureSourceRec.Width,
 			textureSourceRec.Height,
 		)
 	}

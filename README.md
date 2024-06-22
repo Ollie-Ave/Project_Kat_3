@@ -5,10 +5,10 @@
 Below, see a summary of current tasks that either need doing or have been done.
 
 ### To Do
-- Fix bug with falling animation when facing left.
 - Camera movement.
 
 ### Done
+- Fix bug with falling animation when facing left.
 - Do player walking animation.
 - Update Player Sprite to New.
 - Character Rendering
