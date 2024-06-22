@@ -5,7 +5,7 @@
 Below, see a summary of current tasks that either need doing or have been done.
 
 ### To Do
-- Improve the hitbox collisions
+- Improve the hitbox collisions.
 	- I should also see if I can refactor the level collider so that it is on the level object rather than being an entirely seperate entity.
 	- This might mean that the level needs to become an entity.
 
