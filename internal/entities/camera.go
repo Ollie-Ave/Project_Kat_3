@@ -133,11 +133,11 @@ func (c *camera) getNewCameraTarget(checkVelocity bool) rl.Vector2 {
 
 	maxTargetX := float32(c.levelWidth)
 
-	const extraPixelToHackFixRenderingArtifact = 1
+	const extraPixelsToHackFixRenderingArtifact = 5
 
-	if cameraLeftSide <= extraPixelToHackFixRenderingArtifact && (c.velocity.X < 0 || !checkVelocity) {
+	if cameraLeftSide <= extraPixelsToHackFixRenderingArtifact && (c.velocity.X < 0 || !checkVelocity) {
 		currentTarget.X = 0 + (c.camera.Offset.X / 2) + 1
-	} else if cameraRightSide >= maxTargetX-extraPixelToHackFixRenderingArtifact && (c.velocity.X > 0 || !checkVelocity) {
+	} else if cameraRightSide >= maxTargetX-extraPixelsToHackFixRenderingArtifact && (c.velocity.X > 0 || !checkVelocity) {
 		currentTarget.X = maxTargetX - (c.camera.Offset.X / 2) - 1
 	}
 
