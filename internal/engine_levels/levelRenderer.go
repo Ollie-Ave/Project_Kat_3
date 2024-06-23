@@ -2,7 +2,9 @@ package engine_levels
 
 import (
 	"cmp"
+	"os"
 	"slices"
+	"strings"
 
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_entities"
 	"github.com/Ollie-Ave/Project_Kat_3/internal/engine_shared"
@@ -37,7 +39,8 @@ type levelRendererImpl struct {
 func (l *levelRendererImpl) Render(levelData *LevelData) {
 
 	for _, layer := range levelData.CurrentTimePeriod.Layers {
-		if layer.LayerType == engine_shared.TileLayer {
+		if layer.LayerType == engine_shared.TileLayer &&
+			(!strings.Contains(layer.Name, SpawnerLayerIndicator) || os.Getenv(engine_shared.DebugModeEnvironmentVariable) == "true") {
 			l.renderTileLayer(layer, levelData)
 		} else if layer.LayerType == engine_shared.ImageLayer {
 			l.renderImageLayer(layer)

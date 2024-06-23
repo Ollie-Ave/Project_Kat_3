@@ -21,28 +21,24 @@ func main() {
 	entityManager := engine_entities.NewEntityManager()
 	entityManager.SpawnEntity(shared.CameraEntityName, entities.NewCamera(playerStartingPosition.X, entityManager))
 
-	player, err := entities.NewPlayer(
-		playerStartingPosition,
+	levelRenderer := engine_levels.NewLevelRenderer(entityManager)
+	levelLoader := engine_levels.NewLevelLoader()
+	level, err := levels.NewLevelOne(
+		levelLoader,
+		levelRenderer,
 		entityManager,
-		engine_entities.NewPhysicsHandler(entityManager),
-		engine_entities.NewAnimationHandler(entities.PlayerIdleAnimation),
+		entities.NewEntityFactory(entityManager),
 	)
 
 	if err != nil {
 		panic(err)
 	}
 
-	entityManager.SpawnEntity(shared.PlayerEntityName, player)
-
-	levelRenderer := engine_levels.NewLevelRenderer(entityManager)
-	levelLoader := engine_levels.NewLevelLoader()
-	levelOne, err := levels.NewLevelOne(levelLoader, levelRenderer, entityManager)
+	levelManager, err := engine_levels.NewLevelManager(level, levelRenderer, entityManager)
 
 	if err != nil {
 		panic(err)
 	}
-
-	levelManager := engine_levels.NewLevelManager(levelOne, levelRenderer, entityManager)
 
 	for !rl.WindowShouldClose() {
 		update(levelManager, entityManager)

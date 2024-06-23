@@ -6,11 +6,13 @@ import (
 )
 
 const (
-	PastTimePeriod   = "Past"
-	FutureTimePeriod = "Future"
+	PastTimePeriod        = "Past"
+	FutureTimePeriod      = "Future"
+	SpawnerLayerIndicator = "Spawner"
 )
 
 type LevelHandler interface {
+	Initialise() error
 	Update()
 	GetTimePeriod() string
 	engine_shared.Renderable

@@ -13,7 +13,7 @@ type Renderable interface {
 }
 
 type LevelCollider interface {
-	GetLayerCollisionData(layerName string) ([][]bool, int, int)
+	GetLayerCollisionData(layerName string) (data [][]bool, tileWidth int, tileHeight int)
 
 	SetTimePeriod(timePeriod string) error
 }

@@ -10,8 +10,8 @@ const (
 
 	WindowExitKey = rl.KeyCapsLock
 
-	CameraEntityName = "camera"
-	PlayerEntityName = "player"
+	CameraEntityName = "Camera"
+	PlayerEntityName = "Player"
 )
 
 var (

@@ -11,11 +11,17 @@ type LevelManager interface {
 func NewLevelManager(
 	initialLevel LevelHandler,
 	levelRenderer LevelRenderer,
-	entityManager engine_entities.EntityManager) LevelManager {
+	entityManager engine_entities.EntityManager) (LevelManager, error) {
+
+	err := initialLevel.Initialise()
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &LevelManagerImpl{
 		currentLevel: initialLevel,
-	}
+	}, nil
 }
 
 type LevelManagerImpl struct {
