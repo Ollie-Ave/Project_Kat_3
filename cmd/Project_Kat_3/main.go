@@ -82,8 +82,10 @@ func update(levelManager engine_levels.LevelManager, entityManager engine_entiti
 
 	rl.EndMode2D()
 
-	renderFPS()
-	renderTimePeriod(level)
+	if os.Getenv(engine_shared.DebugModeEnvironmentVariable) == "true" {
+		renderFPS()
+		renderTimePeriod(level)
+	}
 
 	rl.EndDrawing()
 
